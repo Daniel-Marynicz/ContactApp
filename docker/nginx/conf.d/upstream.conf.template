@@ -1,0 +1,4 @@
+
+upstream php-upstream {
+    server ${PHP_UPSTREAM_HOST}:9000;
+}

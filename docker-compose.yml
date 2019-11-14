@@ -1,0 +1,31 @@
+version: '3.4'
+services:
+  php:
+    build:
+      context: ./
+      # for production target must be php_final
+      target: php_final_for_dev_team
+    # Comment out these volumes in production
+    volumes:
+      - ./:/srv/app
+    working_dir: /srv/app
+    env_file:
+      - .env.docker
+  nginx:
+    build:
+      context: ./
+      target: nginx_final
+    # Comment out these volumes in production
+    volumes:
+      - ./:/srv/app
+    working_dir: /srv/app
+    environment:
+      PHP_UPSTREAM_HOST: php
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "127.0.0.1"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    ports:
+      - "10011:80"

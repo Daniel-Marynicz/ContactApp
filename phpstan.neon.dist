@@ -1,0 +1,13 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+parameters:
+    level: max
+    paths:
+        - ./src
+        - ./tests
+    autoload_files:
+        - bin/.phpunit/phpunit-7.5/vendor/autoload.php
+    symfony:
+    	container_xml_path: '%rootDir%/../../../var/cache/dev/srcApp_KernelDevDebugContainer.xml'

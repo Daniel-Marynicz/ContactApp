@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+        xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+>
+  <entity name="App\Contact\Domain\Model\Contact" table="contact">
+    <id name="id" type="integer" column="id">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="uuid" type="uuid" column="uuid" precision="0" scale="0" unique="true" nullable="false"/>
+    <field name="name" type="string" column="name" precision="0" scale="0" unique="true" nullable="false"/>
+    <field name="country" type="string" column="country" precision="0" scale="0" nullable="true"/>
+    <field name="streetAndNumber" type="string" column="street_and_number" precision="0" scale="0" nullable="true"/>
+    <field name="postcode" type="string" column="postcode" precision="0" scale="0" nullable="true"/>
+    <field name="city" type="string" column="city" precision="0" scale="0" nullable="true"/>
+    <field name="createdAt" type="datetime_immutable" column="created_at" precision="0" scale="0" nullable="false">
+      <gedmo:timestampable on="create"/>
+    </field>
+    <field name="updatedAt" type="datetime_immutable" column="updated_at" precision="0" scale="0" nullable="false">
+      <gedmo:timestampable on="create"/>
+    </field>
+    <many-to-many field="emails" target-entity="App\Contact\Domain\Model\ContactEmail" fetch="LAZY">
+      <cascade>
+        <cascade-persist/>
+      </cascade>
+      <join-table name="contact_contact_email">
+        <join-columns>
+          <join-column name="contact_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="email_id" referenced-column-name="id" nullable="1"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="phoneNumbers" target-entity="App\Contact\Domain\Model\ContactPhoneNumber" fetch="LAZY">
+      <cascade>
+        <cascade-persist/>
+      </cascade>
+      <join-table name="contact_contact_phone_number">
+        <join-columns>
+          <join-column name="contact_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="phone_number_id" referenced-column-name="id" nullable="1"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

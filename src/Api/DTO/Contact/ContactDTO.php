@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Api\DTO;
+namespace App\Api\DTO\Contact;
 
 use App\Entity\Contact;
 use App\Validator\Constraints\UniqueDTO as UniqueDTOConstraint;
@@ -33,7 +33,7 @@ class ContactDTO
 
     /**
      * @var Collection&Selectable&iterable<ContactEmailDTO>
-     * @JMS\Type("ArrayCollection<App\Api\DTO\ContactEmailDTO>")
+     * @JMS\Type("ArrayCollection<App\Api\DTO\Contact\ContactEmailDTO>")
      * @Assert\Valid()
      */
     private $emails;
@@ -81,7 +81,7 @@ class ContactDTO
 
     /**
      * @var Collection&Selectable&iterable<ContactPhoneDTO>
-     * @JMS\Type("ArrayCollection<App\Api\DTO\ContactPhoneDTO>")
+     * @JMS\Type("ArrayCollection<App\Api\DTO\Contact\ContactPhoneDTO>")
      */
     private $phoneNumbers;
 

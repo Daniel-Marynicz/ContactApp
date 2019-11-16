@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Api\Transformer;
 
-use App\Api\DTO\BadRequestDTO;
-use App\Api\DTO\ErrorDTO;
-use App\Api\DTO\ViolationDTO;
+use App\Api\DTO\Error\BadRequestDTO;
+use App\Api\DTO\Error\ErrorDTO;
+use App\Api\DTO\Error\ViolationDTO;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 

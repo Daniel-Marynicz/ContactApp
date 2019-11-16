@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Api\Transformer;
 
-use App\Api\DTO\ContactDTO;
-use App\Api\DTO\ContactEmailDTO;
-use App\Api\DTO\ContactGetDTO;
-use App\Api\DTO\ContactPhoneDTO;
-use App\Api\DTO\ContactPostDTO;
-use App\Api\DTO\ContactPutDTO;
-use App\Api\DTO\ContactsGetDTO;
+use App\Api\DTO\Contact\ContactDTO;
+use App\Api\DTO\Contact\ContactEmailDTO;
+use App\Api\DTO\Contact\ContactGetDTO;
+use App\Api\DTO\Contact\ContactPhoneDTO;
+use App\Api\DTO\Contact\ContactPostDTO;
+use App\Api\DTO\Contact\ContactPutDTO;
+use App\Api\DTO\Contact\ContactsGetDTO;
 use App\Entity\Contact;
 use App\Entity\ContactEmail;
 use App\Entity\ContactPhoneNumber;

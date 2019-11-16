@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Api\DTO;
+namespace App\Api\DTO\Contact;
 
+use App\Api\DTO\PaginatedResultsDTO;
 use JMS\Serializer\Annotation as JMS;
 
 class ContactsGetDTO extends PaginatedResultsDTO
 {
     /**
      * @var ContactGetDTO[]
-     * @JMS\Type("array<App\Api\DTO\ContactGetDTO>")
+     * @JMS\Type("array<App\Api\DTO\Contact\ContactGetDTO>")
      */
     private $contacts = [];
 

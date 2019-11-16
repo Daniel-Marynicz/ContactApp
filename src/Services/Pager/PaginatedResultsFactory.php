@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\ValueObject;
+namespace App\Services\Pager;
 
+use App\ValueObject\PageParameters;
+use App\ValueObject\PaginatedResults;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use function ceil;
 

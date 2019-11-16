@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Api\DTO;
+namespace App\Api\DTO\Error;
 
 use JMS\Serializer\Annotation as JMS;
 

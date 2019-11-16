@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\Api\Controller;
 
-use App\Api\DTO\BadRequestDTO;
-use App\Api\DTO\ContactGetDTO;
-use App\Api\DTO\ContactPostDTO;
-use App\Api\DTO\ContactPutDTO;
-use App\Api\DTO\ContactsGetDTO;
+use App\Api\DTO\Contact\ContactGetDTO;
+use App\Api\DTO\Contact\ContactPostDTO;
+use App\Api\DTO\Contact\ContactPutDTO;
+use App\Api\DTO\Contact\ContactsGetDTO;
+use App\Api\DTO\Error\BadRequestDTO;
 use App\Api\Transformer\ConstraintViolationTransformer;
 use App\Api\Transformer\ContactTransformer;
 use App\Entity\Contact;
 use App\Manager\ContactManager;
+use App\Repository\ContactRepository;
+use App\Services\Pager\PaginatedResultsFactory;
 use App\ValueObject\PageParameters;
-use App\ValueObject\PaginatedResultsFactory;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -31,16 +32,21 @@ class ContactController extends AbstractFOSRestController
     /** @var ConstraintViolationTransformer */
     private $violationTransformer;
     /** @var ContactManager */
-    private $contactManager;
+    private $manager;
+
+    /** @var ContactRepository */
+    private $repository;
 
     public function __construct(
         ContactTransformer $contactTransformer,
         ConstraintViolationTransformer $violationTransformer,
-        ContactManager $contactManager
+        ContactManager $contactManager,
+        ContactRepository $contactRepository
     ) {
         $this->contactTransformer   = $contactTransformer;
         $this->violationTransformer = $violationTransformer;
-        $this->contactManager       = $contactManager;
+        $this->manager              = $contactManager;
+        $this->repository           = $contactRepository;
     }
 
     /**
@@ -71,9 +77,8 @@ class ContactController extends AbstractFOSRestController
      */
     public function getListAction(int $page, int $limit) : Response
     {
-        $repository     = $this->contactManager->getRepository();
         $pageParameters = new PageParameters($page, $limit);
-        $paginator      = $repository->createPaginator($pageParameters);
+        $paginator      = $this->repository->createPaginator($pageParameters);
         $results        = PaginatedResultsFactory::createPaginatedResults($paginator, $pageParameters);
 
         $list = $this->contactTransformer->modelsToDto($results);
@@ -223,8 +228,8 @@ class ContactController extends AbstractFOSRestController
      */
     public function deleteAction(Contact $contact) : Response
     {
-        $this->contactManager->remove($contact);
-        $this->contactManager->flush();
+        $this->manager->remove($contact);
+        $this->manager->flush();
 
         return $this->handleView(
             $this->view(null, Response::HTTP_NO_CONTENT)
@@ -233,7 +238,7 @@ class ContactController extends AbstractFOSRestController
 
     private function handleUpdate(Contact $contact, ?int $statusCode = null) : Response
     {
-        $this->contactManager->update($contact);
+        $this->manager->update($contact);
         $dto = $this->contactTransformer->modelToDto($contact);
 
         return $this->handleView(

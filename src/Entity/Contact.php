@@ -117,7 +117,7 @@ class Contact
 
     public function __construct(?string $uuid = null)
     {
-        $this->uuid = $uuid ? UuidProvider::fromString($uuid) : UuidProvider::generate();
+        $this->uuid         = $uuid ? UuidProvider::fromString($uuid) : UuidProvider::generate();
         $this->emails       = new ArrayCollection();
         $this->phoneNumbers = new ArrayCollection();
     }
@@ -127,10 +127,7 @@ class Contact
         return $this->id;
     }
 
-    /**
-     * @return UuidInterface
-     */
-    public function getUuid(): UuidInterface
+    public function getUuid() : UuidInterface
     {
         return $this->uuid;
     }

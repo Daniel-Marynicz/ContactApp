@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Behat\Context;
 
 use App\Entity\Contact;
+use App\Entity\ContactEmail;
 use App\Manager\ContactManager;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
@@ -27,6 +28,13 @@ class ContactContext implements Context
         foreach ($table as $row) {
             $contact = new Contact($row['uuid']);
             $contact->setName($row['name']);
+            if (isset($row['email1'])) {
+                $contact->addEmail(new ContactEmail($row['email1']));
+            }
+            if (isset($row['email2'])) {
+                $contact->addEmail(new ContactEmail($row['email2']));
+            }
+
             $this->contactManager->persist($contact);
         }
         $this->contactManager->flush();

@@ -63,26 +63,62 @@ class ContactTransformer
             ->setCity($contactDTO->getCity())
             ->setCountry($contactDTO->getCountry());
 
-        foreach ($contactDTO->getEmails() as $email) {
-            $contactEmail = $contact->getEmailWithValue($email->getEmail());
-            if (! $contactEmail instanceof ContactEmail) {
-                $contactEmail = new ContactEmail();
-            }
-            $contactEmail->setValue($email->getEmail());
-            $contactEmail->setLabel($email->getLabel());
-            $contact->addEmail($contactEmail);
-        }
+        $this->removeEmailsFromModel($contactDTO, $contact);
+        $this->addEmailsToModel($contactDTO, $contact);
 
-        foreach ($contactDTO->getPhoneNumbers() as $phoneNumber) {
-            $contactPhoneNumber = $contact->getPhoneNumberWithValue($phoneNumber->getPhone());
-            if (! $contactPhoneNumber instanceof ContactPhoneNumber) {
-                $contactPhoneNumber = new ContactPhoneNumber();
-            }
-            $contactPhoneNumber->setValue($phoneNumber->getPhone());
-            $contactPhoneNumber->setLabel($phoneNumber->getLabel());
-            $contact->addPhoneNumber($contactPhoneNumber);
-        }
+        $this->removePhoneNumbersFromModel($contactDTO, $contact);
+        $this->addPhoneNumbersToModel($contactDTO, $contact);
 
         return $contact;
+    }
+
+    private function removeEmailsFromModel(ContactDTO $contactDTO, Contact $contact) : void
+    {
+        $values = $contact->getEmails();
+        foreach ($values as $key => $value) {
+            if ($contactDTO->getEmailWithValue($value->getValue())) {
+                continue;
+            }
+
+            $values->remove($key);
+        }
+    }
+
+    private function addEmailsToModel(ContactDTO $contactDTO, Contact $contact) : void
+    {
+        foreach ($contactDTO->getEmails() as $value) {
+            $contactValue = $contact->getEmailWithValue($value->getValue());
+            if (! $contactValue instanceof ContactEmail) {
+                $contactValue = new ContactEmail($value->getValue());
+            }
+            $contactValue->setValue($value->getValue());
+            $contactValue->setLabel($value->getLabel());
+            $contact->addEmail($contactValue);
+        }
+    }
+
+    private function removePhoneNumbersFromModel(ContactDTO $contactDTO, Contact $contact) : void
+    {
+        $values = $contact->getPhoneNumbers();
+        foreach ($values as $key => $value) {
+            if ($contactDTO->getPhoneNumberWithValue($value->getValue())) {
+                continue;
+            }
+
+            $values->remove($key);
+        }
+    }
+
+    private function addPhoneNumbersToModel(ContactDTO $contactDTO, Contact $contact) : void
+    {
+        foreach ($contactDTO->getPhoneNumbers() as $value) {
+            $contactValue = $contact->getPhoneNumberWithValue($value->getValue());
+            if (! $contactValue instanceof ContactPhoneNumber) {
+                $contactValue = new ContactPhoneNumber($value->getValue());
+            }
+            $contactValue->setValue($value->getValue());
+            $contactValue->setLabel($value->getLabel());
+            $contact->addPhoneNumber($contactValue);
+        }
     }
 }

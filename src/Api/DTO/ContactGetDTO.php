@@ -58,9 +58,14 @@ class ContactGetDTO extends ContactDTO
         array $phoneNumbers = []
     ) {
         parent::__construct($name, $streetAndNumber, $postcode, $city, $country, $emails, $phoneNumbers);
-        $this->uuid        = $uuid;
+        $this->uuid      = $uuid;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getUuid() : UuidInterface
+    {
+        return $this->uuid;
     }
 
     public function getCreatedAt() : ?DateTimeImmutable

@@ -17,7 +17,7 @@ class ContactEmailDTO
      *     example="mail@example.org"
      * )
      */
-    private $email;
+    private $value;
 
     /**
      * @var string|null
@@ -29,15 +29,15 @@ class ContactEmailDTO
      */
     private $label;
 
-    public function __construct(string $email, ?string $label)
+    public function __construct(string $value, ?string $label)
     {
-        $this->email = $email;
+        $this->value = $value;
         $this->label = $label;
     }
 
-    public function getEmail() : string
+    public function getValue() : string
     {
-        return $this->email;
+        return $this->value;
     }
 
     public function getLabel() : ?string

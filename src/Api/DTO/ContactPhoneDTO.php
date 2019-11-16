@@ -17,7 +17,7 @@ class ContactPhoneDTO
      *     example="+48 123 123 123"
      * )
      */
-    private $phone;
+    private $value;
 
     /**
      * @var string|null
@@ -29,15 +29,15 @@ class ContactPhoneDTO
      */
     private $label;
 
-    public function __construct(string $phone, ?string $label)
+    public function __construct(string $value, ?string $label)
     {
-        $this->phone = $phone;
+        $this->value = $value;
         $this->label = $label;
     }
 
-    public function getPhone() : string
+    public function getValue() : string
     {
-        return $this->phone;
+        return $this->value;
     }
 
     public function getLabel() : ?string

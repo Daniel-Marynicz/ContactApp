@@ -11,7 +11,7 @@ Feature: Contacts
       "name": "<name>",
       "emails": [
         {
-          "email": "<email>",
+          "value": "<email>",
           "label": "<emailLabel>"
         }
       ],
@@ -21,7 +21,7 @@ Feature: Contacts
        "country": "<country>",
        "phoneNumbers": [
           {
-            "phone": "<phone>",
+            "value": "<phone>",
             "label": "<phoneLabel>"
           }
         ]
@@ -31,13 +31,13 @@ Feature: Contacts
     And the response should be in JSON
     And the JSON nodes should contain:
       | name                  | <name>              |
-      | emails[0].email       | <email>             |
+      | emails[0].value       | <email>             |
       | emails[0].label       | <emailLabel>        |
       | streetAndNumber       | <streetAndNumber>   |
       | postcode              | <postcode>          |
       | city                  | <city>              |
       | country               | <country>           |
-      | phoneNumbers[0].phone | <phone>             |
+      | phoneNumbers[0].value | <phone>             |
       | phoneNumbers[0].label | <phoneLabel>        |
     Examples:
       | name          | email             | emailLabel | streetAndNumber           | postcode | city    | country | phone           | phoneLabel |
@@ -55,7 +55,7 @@ Feature: Contacts
         "name": "<NewName>",
         "emails": [
           {
-            "email": "<email>",
+            "value": "<email>",
             "label": "<emailLabel>"
           }
         ],
@@ -65,7 +65,7 @@ Feature: Contacts
          "country": "<country>",
          "phoneNumbers": [
             {
-              "phone": "<phone>",
+              "value": "<phone>",
               "label": "<phoneLabel>"
             }
           ]
@@ -76,13 +76,13 @@ Feature: Contacts
       And the JSON nodes should contain:
         | uuid                  | <uuid>              |
         | name                  | <NewName>           |
-        | emails[0].email       | <email>             |
+        | emails[0].value       | <email>             |
         | emails[0].label       | <emailLabel>        |
         | streetAndNumber       | <streetAndNumber>   |
         | postcode              | <postcode>          |
         | city                  | <city>              |
         | country               | <country>           |
-        | phoneNumbers[0].phone | <phone>             |
+        | phoneNumbers[0].value | <phone>             |
         | phoneNumbers[0].label | <phoneLabel>        |
       Examples:
         | uuid                                   | name     | NewName      | email             | emailLabel | streetAndNumber           | postcode | city    | country | phone           | phoneLabel |
@@ -121,3 +121,59 @@ Feature: Contacts
       | uuid                                 | name     |
       | 6bf93644-b326-4023-8dc9-32c301afaa7d | test     |
       | b34872fe-8016-44ff-9b77-9ae1e0eaaad8 | test2    |
+  Scenario Outline: remove a email from contact
+    Given there are following contacts
+      | uuid   | name          | email1   | email2   |
+      | <uuid> | <name>        | <email1> | <email2> |
+    And I add "Content-Type" header equal to "application/json"
+    And I add "Accept" header equal to "application/json"
+    And I send a "PUT" request to "/api/contact/<uuid>" with body:
+    """
+      {
+        "name" : "<name>",
+        "emails": [
+          {
+            "value": "<email2>"
+          }
+        ]
+      }
+    """
+    Then the response status code should be 200
+    And the response should be in JSON
+    And the JSON node "emails" should have 1 element
+    And the JSON nodes should contain:
+      | uuid                  | <uuid>               |
+      | name                  | <name>               |
+      | emails[0].value       | <email2>             |
+    Examples:
+      | uuid                                 | name     | email1        |   email2       |
+      | 6bf93644-b326-4023-8dc9-32c301afaa7d | test     | a@example.org | vv@example.org |
+      | b34872fe-8016-44ff-9b77-9ae1e0eaaad8 | test2    | c@example.org | ss@example.org |
+  Scenario Outline: remove a phone number from contact
+    Given there are following contacts
+      | uuid   | name          | phone1   | phone2   |
+      | <uuid> | <name>        | <phone1> | <phone2> |
+    And I add "Content-Type" header equal to "application/json"
+    And I add "Accept" header equal to "application/json"
+    And I send a "PUT" request to "/api/contact/<uuid>" with body:
+    """
+      {
+        "name" : "<name>",
+        "phoneNumbers": [
+          {
+            "value": "<phone2>"
+          }
+        ]
+      }
+    """
+    Then the response status code should be 200
+    And the response should be in JSON
+    And the JSON node "phoneNumbers" should have 1 element
+    And the JSON nodes should contain:
+      | uuid                  | <uuid>               |
+      | name                  | <name>               |
+      | phoneNumbers[0].value       | <phone2>       |
+    Examples:
+      | uuid                                 | name     | phone1          |   phone2           |
+      | 6bf93644-b326-4023-8dc9-32c301afaa7d | test     | +48 123 541 212 | +48 123 123 212    |
+      | b34872fe-8016-44ff-9b77-9ae1e0eaaad8 | test2    | +48 123 321 212 | +48 123 654 212    |

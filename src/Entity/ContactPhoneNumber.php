@@ -34,6 +34,12 @@ class ContactPhoneNumber
      */
     private $label;
 
+    public function __construct(string $value, ?string $label = null)
+    {
+        $this->value = $value;
+        $this->label = $label;
+    }
+
     public function getId() : int
     {
         return $this->id;

@@ -153,7 +153,6 @@ class ContactController extends AbstractFOSRestController
         return $this->handleUpdate($contact, Response::HTTP_OK);
     }
 
-
     /**
      * Delete a contact
      *
@@ -179,6 +178,7 @@ class ContactController extends AbstractFOSRestController
     {
         $this->contactManager->remove($contact);
         $this->contactManager->flush();
+
         return $this->handleView(
             $this->view(null, Response::HTTP_NO_CONTENT)
         );

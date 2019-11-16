@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Api\DTO;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Selectable;
 use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
 
@@ -20,8 +24,8 @@ class ContactDTO
     private $name;
 
     /**
-     * @var ContactEmailDTO[]
-     * @JMS\Type("array<App\Api\DTO\ContactEmailDTO>")
+     * @var Collection&Selectable&iterable<ContactEmailDTO>
+     * @JMS\Type("ArrayCollection<App\Api\DTO\ContactEmailDTO>")
      */
     private $emails;
 
@@ -67,8 +71,8 @@ class ContactDTO
 
 
     /**
-     * @var ContactPhoneDTO[]
-     * @JMS\Type("array<App\Api\DTO\ContactPhoneDTO>")
+     * @var Collection&Selectable&iterable<ContactPhoneDTO>
+     * @JMS\Type("ArrayCollection<App\Api\DTO\ContactPhoneDTO>")
      */
     private $phoneNumbers;
 
@@ -90,8 +94,8 @@ class ContactDTO
         $this->postcode        = $postcode;
         $this->city            = $city;
         $this->country         = $country;
-        $this->emails          = $emails;
-        $this->phoneNumbers    = $phoneNumbers;
+        $this->emails          = new ArrayCollection($emails);
+        $this->phoneNumbers    = new ArrayCollection($phoneNumbers);
     }
 
     public function getName() : string
@@ -100,11 +104,24 @@ class ContactDTO
     }
 
     /**
-     * @return ContactEmailDTO[]
+     * @return Collection&Selectable&iterable<ContactEmailDTO>
      */
-    public function getEmails() : array
+    public function getEmails() : Selectable
     {
+        if ($this->emails === null) {
+            return new ArrayCollection();
+        }
+
         return $this->emails;
+    }
+
+    public function getEmailWithValue(string $value) : ?ContactEmailDTO
+    {
+        $criteria = new Criteria();
+        $criteria->where(Criteria::expr()->eq('value', $value));
+        $email = $this->getEmails()->matching($criteria)->first();
+
+        return $email ? $email : null;
     }
 
     public function getStreetAndNumber() : ?string
@@ -123,11 +140,24 @@ class ContactDTO
     }
 
     /**
-     * @return ContactPhoneDTO[]
+     * @return Collection&Selectable&iterable<ContactPhoneDTO>
      */
-    public function getPhoneNumbers() : array
+    public function getPhoneNumbers() : Selectable
     {
+        if ($this->phoneNumbers === null) {
+            return new ArrayCollection();
+        }
+
         return $this->phoneNumbers;
+    }
+
+    public function getPhoneNumberWithValue(string $value) : ?ContactEmailDTO
+    {
+        $criteria = new Criteria();
+        $criteria->where(Criteria::expr()->eq('value', $value));
+        $phone = $this->getPhoneNumbers()->matching($criteria)->first();
+
+        return $phone ? $phone : null;
     }
 
     public function getCountry() : ?string

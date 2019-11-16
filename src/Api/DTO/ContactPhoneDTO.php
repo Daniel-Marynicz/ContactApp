@@ -6,6 +6,7 @@ namespace App\Api\DTO;
 
 use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ContactPhoneDTO
 {
@@ -16,6 +17,7 @@ class ContactPhoneDTO
      *     type="string",
      *     example="+48 123 123 123"
      * )
+     * @Assert\NotBlank()
      */
     private $value;
 

@@ -10,12 +10,30 @@ use App\Api\DTO\ContactGetDTO;
 use App\Api\DTO\ContactPhoneDTO;
 use App\Api\DTO\ContactPostDTO;
 use App\Api\DTO\ContactPutDTO;
+use App\Api\DTO\ContactsGetDTO;
 use App\Entity\Contact;
 use App\Entity\ContactEmail;
 use App\Entity\ContactPhoneNumber;
+use App\ValueObject\PaginatedResults;
 
 class ContactTransformer
 {
+    public function modelsToDto(PaginatedResults $paginatedResults) : ContactsGetDTO
+    {
+        $dtos = [];
+        foreach ($paginatedResults->getPaginator() as $contact) {
+            $dtos[] = $this->modelToDto($contact);
+        }
+
+        return new ContactsGetDTO(
+            $paginatedResults->getPageNumber(),
+            $paginatedResults->getTotalPages(),
+            $paginatedResults->getCount(),
+            $paginatedResults->getLimit(),
+            $dtos
+        );
+    }
+
     public function modelToDto(Contact $contact) : ContactGetDTO
     {
         $emails = [];

@@ -6,6 +6,7 @@ namespace App\Api\DTO;
 
 use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ContactEmailDTO
 {
@@ -16,6 +17,8 @@ class ContactEmailDTO
      *     type="string",
      *     example="mail@example.org"
      * )
+     * @Assert\Email()
+     * @Assert\NotBlank()
      */
     private $value;
 

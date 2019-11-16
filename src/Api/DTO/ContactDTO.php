@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Api\DTO;
 
+use App\Entity\Contact;
+use App\Validator\Constraints\UniqueDTO as UniqueDTOConstraint;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 use JMS\Serializer\Annotation as JMS;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ContactDTO
 {
@@ -20,12 +23,18 @@ class ContactDTO
      *     type="string",
      *     example="Jon Doe"
      * )
+     * @UniqueDTOConstraint(
+     *     entityClass=Contact::class,
+     *     entityPropertyName="name",
+     *     requestKey="uuid"
+     * )
      */
     private $name;
 
     /**
      * @var Collection&Selectable&iterable<ContactEmailDTO>
      * @JMS\Type("ArrayCollection<App\Api\DTO\ContactEmailDTO>")
+     * @Assert\Valid()
      */
     private $emails;
 
@@ -151,7 +160,7 @@ class ContactDTO
         return $this->phoneNumbers;
     }
 
-    public function getPhoneNumberWithValue(string $value) : ?ContactEmailDTO
+    public function getPhoneNumberWithValue(string $value) : ?ContactPhoneDTO
     {
         $criteria = new Criteria();
         $criteria->where(Criteria::expr()->eq('value', $value));

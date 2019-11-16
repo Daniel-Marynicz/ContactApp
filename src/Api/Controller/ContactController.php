@@ -4,30 +4,43 @@ declare(strict_types=1);
 
 namespace App\Api\Controller;
 
+use App\Api\DTO\BadRequestDTO;
 use App\Api\DTO\ContactGetDTO;
 use App\Api\DTO\ContactPostDTO;
 use App\Api\DTO\ContactPutDTO;
+use App\Api\DTO\ContactsGetDTO;
+use App\Api\Transformer\ConstraintViolationTransformer;
 use App\Api\Transformer\ContactTransformer;
 use App\Entity\Contact;
 use App\Manager\ContactManager;
+use App\ValueObject\PageParameters;
+use App\ValueObject\PaginatedResultsFactory;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use function count;
 
 class ContactController extends AbstractFOSRestController
 {
     /** @var ContactTransformer */
     private $contactTransformer;
+    /** @var ConstraintViolationTransformer */
+    private $violationTransformer;
     /** @var ContactManager */
     private $contactManager;
 
-    public function __construct(ContactTransformer $contactTransformer, ContactManager $contactManager)
-    {
-        $this->contactTransformer = $contactTransformer;
-        $this->contactManager     = $contactManager;
+    public function __construct(
+        ContactTransformer $contactTransformer,
+        ConstraintViolationTransformer $violationTransformer,
+        ContactManager $contactManager
+    ) {
+        $this->contactTransformer   = $contactTransformer;
+        $this->violationTransformer = $violationTransformer;
+        $this->contactManager       = $contactManager;
     }
 
     /**
@@ -38,15 +51,35 @@ class ContactController extends AbstractFOSRestController
      *     description="List Contacts",
      *     @SWG\Response(
      *         response="200",
-     *         description="Contacts list"
+     *         description="Contacts list",
+     *         @Model(type=ContactsGetDTO::class)
      *    )
+     * )
+     * @Rest\QueryParam(
+     *     name="page",
+     *     requirements="\d+",
+     *     default=PageParameters::DEFAULT_PAGE_NUMBER,
+     *     description="Results page"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default=PageParameters::DEFAULT_LIMIT_PER_PAGE,
+     *     description="Limit results per page"
      * )
      * @Rest\Get("contact")
      */
-    public function getListAction() : Response
+    public function getListAction(int $page, int $limit) : Response
     {
+        $repository     = $this->contactManager->getRepository();
+        $pageParameters = new PageParameters($page, $limit);
+        $paginator      = $repository->createPaginator($pageParameters);
+        $results        = PaginatedResultsFactory::createPaginatedResults($paginator, $pageParameters);
+
+        $list = $this->contactTransformer->modelsToDto($results);
+
         return $this->handleView(
-            $this->view([], Response::HTTP_NO_CONTENT)
+            $this->view($list, Response::HTTP_OK)
         );
     }
 
@@ -96,7 +129,8 @@ class ContactController extends AbstractFOSRestController
      *     ),
      *     @SWG\Response(
      *          response="400",
-     *          description="Invalid arguments"
+     *          description="Invalid arguments",
+     *          @Model(type=BadRequestDTO::class)
      *     )
      * )
      * @Rest\Post("contact")
@@ -109,8 +143,14 @@ class ContactController extends AbstractFOSRestController
      * )
      * @ParamConverter("contactDTO", converter="fos_rest.request_body")
      */
-    public function postAction(ContactPostDTO $contactDTO) : Response
-    {
+    public function postAction(
+        ContactPostDTO $contactDTO,
+        ConstraintViolationListInterface $validationErrors
+    ) : Response {
+        if (count($validationErrors)) {
+            return $this->handleValidationErrors($validationErrors);
+        }
+
         $contact = $this->contactTransformer->postDtoToModel($contactDTO);
 
         return $this->handleUpdate($contact, Response::HTTP_CREATED);
@@ -129,7 +169,8 @@ class ContactController extends AbstractFOSRestController
      *     ),
      *     @SWG\Response(
      *          response="400",
-     *          description="Invalid arguments"
+     *          description="Invalid arguments",
+     *          @Model(type=BadRequestDTO::class)
      *     ),
      *     @SWG\Response(
      *          response="404",
@@ -146,8 +187,14 @@ class ContactController extends AbstractFOSRestController
      * )
      * @ParamConverter("contactDTO", converter="fos_rest.request_body")
      */
-    public function putAction(ContactPutDTO $contactDTO, Contact $contact) : Response
-    {
+    public function putAction(
+        ContactPutDTO $contactDTO,
+        Contact $contact,
+        ConstraintViolationListInterface $validationErrors
+    ) : Response {
+        if (count($validationErrors)) {
+            return $this->handleValidationErrors($validationErrors);
+        }
         $contact = $this->contactTransformer->putDtoToModel($contactDTO, $contact);
 
         return $this->handleUpdate($contact, Response::HTTP_OK);
@@ -192,5 +239,12 @@ class ContactController extends AbstractFOSRestController
         return $this->handleView(
             $this->view($dto, $statusCode)
         );
+    }
+
+    protected function handleValidationErrors(ConstraintViolationListInterface $validationErrors) : Response
+    {
+        $error = $this->violationTransformer->violationsToDto($validationErrors);
+
+        return $this->handleView($this->view($error, Response::HTTP_BAD_REQUEST));
     }
 }

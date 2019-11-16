@@ -9,14 +9,26 @@
         "jms/serializer-bundle": "^3.4",
         "nelmio/api-doc-bundle": "^3.4",
         "nelmio/cors-bundle": "^2.0",
+        "sensio/framework-extra-bundle": "^5.5",
+        "symfony/asset": "4.3.*",
         "symfony/console": "4.3.*",
         "symfony/dotenv": "4.3.*",
         "symfony/flex": "^1.3.1",
         "symfony/framework-bundle": "4.3.*",
+        "symfony/orm-pack": "^1.0",
+        "symfony/security-csrf": "4.3.*",
+        "symfony/twig-pack": "^1.0",
         "symfony/yaml": "4.3.*"
     },
     "require-dev": {
+        "behat/behat": "^3.5",
+        "behat/mink": "dev-master",
+        "behat/mink-browserkit-driver": "^1.3",
+        "behat/mink-extension": "^2.3",
+        "behat/symfony2-extension": "^2.1",
+        "behatch/contexts": "^3.2",
         "doctrine/coding-standard": "^6.0",
+        "friends-of-behat/symfony-extension": "^2.0",
         "phpstan/phpstan": "^0.11.19",
         "phpstan/phpstan-doctrine": "^0.11.6",
         "phpstan/phpstan-phpunit": "^0.11.2",
@@ -75,6 +87,9 @@
         "phpunit": [
             "./bin/phpunit "
         ],
+        "behat": [
+            "./vendor/bin/behat --colors --strict --stop-on-failure"
+        ],
         "phplint": [
             "find . -path ./vendor -prune  -o -path ./var -prune -o  -name \"*.php\" -print0 | xargs -0 -n1 php -l"
         ],
@@ -82,7 +97,8 @@
             "@phpcbfWithoutErrorCode",
             "@phpcs",
             "@phpunit",
-            "@phpstan"
+            "@phpstan",
+            "@behat"
         ]
     },
     "conflict": {

@@ -1,0 +1,15 @@
+imports:
+    - features/suites.yaml
+default:
+    extensions:
+        FriendsOfBehat\SymfonyExtension: ~
+        Behatch\Extension: ~
+        Behat\MinkExtension:
+            base_url:  'http://php'
+            sessions:
+                default:
+                    symfony2: ~
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: tests/bootstrap/bootstrap.php
+                class: App\Kernel

@@ -20,5 +20,7 @@
     <file>public/</file>
     <file>src/</file>
     <file>tests/</file>
+    <file>features/</file>
     <exclude-pattern>bin/.phpunit</exclude-pattern>
+    <exclude-pattern>src/Migrations</exclude-pattern>
 </ruleset>

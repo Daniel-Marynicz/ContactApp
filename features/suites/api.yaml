@@ -1,0 +1,15 @@
+default:
+    suites:
+        api:
+            contexts:
+            - behatch:context:debug:
+                screenshotDir: "var/log"
+            - behatch:context:browser:
+                    timeout: 10
+            - behatch:context:rest
+            - behatch:context:json
+            - App\Tests\Behat\Context\DatabaseContext
+            - Behat\MinkExtension\Context\MinkContext
+            - App\Tests\Behat\Context\ContactContext
+            filters:
+                tags: "@api"

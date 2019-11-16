@@ -86,17 +86,7 @@ FROM nginx:1.17 AS nginx
 RUN apt-get update && apt-get install -y \
     curl
 
-RUN mkdir -p /etc/nginx/sites-enabled
-RUN rm -f /etc/nginx/conf.d/default.conf
-ADD docker/nginx/nginx.conf /etc/nginx/nginx.conf
-ADD docker/nginx/conf.d/upstream.conf.template /etc/nginx/conf.d/upstream.conf.template
-ADD docker/nginx/symfony-production.conf.template /etc/nginx/symfony-production.conf.template
-ADD docker/nginx/static-cache-hosting.conf /etc/nginx/static-cache-hosting.conf
-ADD docker/nginx/run-nginx.sh /usr/local/bin/run-nginx.sh
-CMD chmod 755 /usr/local/bin/run-nginx.sh
-
 HEALTHCHECK --interval=30s --timeout=5s --retries=5 CMD curl --fail http://localhost || exit 1
 
-CMD ["run-nginx.sh"]
 
 FROM nginx as nginx_final

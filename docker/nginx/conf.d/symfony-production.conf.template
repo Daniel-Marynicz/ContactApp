@@ -1,16 +1,13 @@
+upstream php-upstream {
+    server ${PHP_UPSTREAM_HOST}:9000;
+}
+
 server {
-    server_name symfony.dev;
+    server_name symfony;
     root /srv/app/public;
 
     location / {
         try_files ${DOLLAR}uri /index.php${DOLLAR}is_args${DOLLAR}args;
-        # kill cache
-
-        add_header Last-Modified ${DOLLAR}date_gmt;
-        add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
-        if_modified_since off;
-        expires off;
-        etag off;
     }
 
     location ~ ^/index\.php(/|$) {

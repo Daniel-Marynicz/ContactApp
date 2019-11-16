@@ -3,10 +3,13 @@ includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-phpunit/rules.neon
 parameters:
+    excludes_analyse:
+        - %rootDir%/../../../src/Migrations/*
     level: max
     paths:
         - ./src
         - ./tests
+        - ./features
     autoload_files:
         - bin/.phpunit/phpunit-7.5/vendor/autoload.php
     symfony:

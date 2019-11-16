@@ -1,0 +1,14 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  #Behat
+  App\Tests\Behat\Context\:
+    resource: '%kernel.project_dir%/tests/Behat/Context/*'
+    public: true
+
+  App\Tests\Behat\Context\DatabaseContext:
+    arguments:
+      - '@doctrine'

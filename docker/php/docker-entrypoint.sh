@@ -35,6 +35,15 @@ if [ "$1" = 'php-fpm' ] ; then
         composer install --prefer-dist --no-progress --no-suggest --no-interaction
     fi
 
+    >&2 echo "Waiting for db to be ready..."
+    until bin/console doctrine:query:sql "SELECT 1" > /dev/null 2>&1; do
+		sleep 1
+	done
+
+	if ls -A src/Migrations/*.php > /dev/null 2>&1; then
+		bin/console doctrine:migrations:migrate --no-interaction
+	fi
+
     if [ "$APP_ENV" != 'prod' ]; then
         echo -e "\e[30;48;5;82m Symfony app is available at http://localhost:10011 \e[0m"
     fi

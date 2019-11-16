@@ -9,6 +9,7 @@
         "jms/serializer-bundle": "^3.4",
         "nelmio/api-doc-bundle": "^3.4",
         "nelmio/cors-bundle": "^2.0",
+        "ramsey/uuid-doctrine": "^1.5",
         "sensio/framework-extra-bundle": "^5.5",
         "symfony/asset": "4.3.*",
         "symfony/console": "4.3.*",

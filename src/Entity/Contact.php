@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ContactRepository;
+use App\Services\Uuid\UuidProvider;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,6 +13,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ContactRepository::class)
@@ -28,7 +30,15 @@ class Contact
     private $id;
 
     /**
-     * @ORM\Column()
+     * @ORM\Column(type="uuid", unique=true)
+     *
+     * @var UuidInterface
+     * @Gedmo\Versioned
+     */
+    private $uuid;
+
+    /**
+     * @ORM\Column(unique=true)
      *
      * @var string
      */
@@ -105,8 +115,9 @@ class Contact
      */
     private $updatedAt;
 
-    public function __construct()
+    public function __construct(?string $uuid = null)
     {
+        $this->uuid = $uuid ? UuidProvider::fromString($uuid) : UuidProvider::generate();
         $this->emails       = new ArrayCollection();
         $this->phoneNumbers = new ArrayCollection();
     }
@@ -116,11 +127,12 @@ class Contact
         return $this->id;
     }
 
-    public function setId(int $id) : Contact
+    /**
+     * @return UuidInterface
+     */
+    public function getUuid(): UuidInterface
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->uuid;
     }
 
     public function getName() : string

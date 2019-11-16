@@ -29,7 +29,7 @@ class ContactTransformer
         }
 
         return new ContactGetDTO(
-            $contact->getId(),
+            $contact->getUuid(),
             $contact->getName(),
             $contact->getCreatedAt(),
             $contact->getUpdatedAt(),

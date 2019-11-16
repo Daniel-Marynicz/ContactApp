@@ -25,9 +25,8 @@ class ContactContext implements Context
     public function thereAreFollowingContacts(TableNode $table) : void
     {
         foreach ($table as $row) {
-            $contact = new Contact();
+            $contact = new Contact($row['uuid']);
             $contact->setName($row['name']);
-            $contact->setId((int) $row['id']);
             $this->contactManager->persist($contact);
         }
         $this->contactManager->flush();

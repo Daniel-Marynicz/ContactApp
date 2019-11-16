@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method void refresh(Contact $object)
  * @method void remove(Contact $object)
  * @method void persist(Contact $object)
+ * @method void update(Contact $object)
  */
 class ContactManager extends Manager
 {

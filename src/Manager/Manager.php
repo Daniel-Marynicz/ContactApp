@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Manager;
 
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use InvalidArgumentException;
@@ -57,9 +58,20 @@ abstract class Manager
         $this->objectManager->refresh($object);
     }
 
+    public function update(object $object) : void
+    {
+        $this->persist($object);
+        $this->flush();
+    }
+
     public function getRepository() : ObjectRepository
     {
         return $this->objectManager->getRepository($this->getClass());
+    }
+
+    public function getClassMetadata() : ClassMetadata
+    {
+        return $this->objectManager->getClassMetadata($this->getClass());
     }
 
     public function getClass() : string

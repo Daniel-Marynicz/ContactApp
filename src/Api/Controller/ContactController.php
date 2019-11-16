@@ -41,7 +41,7 @@ class ContactController extends AbstractFOSRestController
      *         description="Contacts list"
      *    )
      * )
-     * @Rest\Get("contact/list")
+     * @Rest\Get("contact")
      */
     public function getListAction() : Response
     {
@@ -66,9 +66,9 @@ class ContactController extends AbstractFOSRestController
      *          description="Contact not found"
      *     )
      * )
-     * @Rest\Get("contact/{id}")
+     * @Rest\Get("contact/{uuid}")
      * @SWG\Parameter(
-     *     name="id",
+     *     name="uuid",
      *     type="string",
      *     in="path",
      *     required=true
@@ -136,7 +136,7 @@ class ContactController extends AbstractFOSRestController
      *          description="Contact not found"
      *     )
      * )
-     * @Rest\Put("contact/{id}")
+     * @Rest\Put("contact/{uuid}")
      * @SWG\Parameter(
      *     name="json",
      *     type="string",
@@ -153,10 +153,40 @@ class ContactController extends AbstractFOSRestController
         return $this->handleUpdate($contact, Response::HTTP_OK);
     }
 
+
+    /**
+     * Delete a contact
+     *
+     *  @SWG\Delete(
+     *     tags={"Contact"},
+     *     description="Delete contact",
+     *     @SWG\Response(
+     *          response="204",
+     *          description="No content"
+     *     ),
+     *     @SWG\Response(
+     *          response="400",
+     *          description="Invalid arguments"
+     *     ),
+     *     @SWG\Response(
+     *          response="404",
+     *          description="Contact not found"
+     *     )
+     * )
+     * @Rest\Delete("contact/{uuid}")
+     */
+    public function deleteAction(Contact $contact) : Response
+    {
+        $this->contactManager->remove($contact);
+        $this->contactManager->flush();
+        return $this->handleView(
+            $this->view(null, Response::HTTP_NO_CONTENT)
+        );
+    }
+
     private function handleUpdate(Contact $contact, ?int $statusCode = null) : Response
     {
-        $this->contactManager->persist($contact);
-        $this->contactManager->flush();
+        $this->contactManager->update($contact);
         $dto = $this->contactTransformer->modelToDto($contact);
 
         return $this->handleView(

@@ -6,19 +6,20 @@ namespace App\Api\DTO;
 
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as JMS;
+use Ramsey\Uuid\UuidInterface;
 use Swagger\Annotations as SWG;
 
 class ContactGetDTO extends ContactDTO
 {
     /**
-     * @var int
-     * @JMS\Type("integer")
+     * @var UuidInterface
+     * @JMS\Type("string")
      * @SWG\Property(
-     *     type="integer",
-     *     example=123
+     *     type="uuid",
+     *     example="9d1cd170-773f-4e2d-b115-5d95c3fafaa1"
      * )
      */
-    private $id;
+    private $uuid;
 
     /**
      * @var DateTimeImmutable|null
@@ -45,7 +46,7 @@ class ContactGetDTO extends ContactDTO
      * @param array<int, ContactPhoneDTO> $phoneNumbers
      */
     public function __construct(
-        int $id,
+        UuidInterface $uuid,
         string $name,
         ?DateTimeImmutable $createdAt,
         ?DateTimeImmutable $updatedAt,
@@ -57,14 +58,9 @@ class ContactGetDTO extends ContactDTO
         array $phoneNumbers = []
     ) {
         parent::__construct($name, $streetAndNumber, $postcode, $city, $country, $emails, $phoneNumbers);
-        $this->id        = $id;
+        $this->uuid        = $uuid;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
-    }
-
-    public function getId() : int
-    {
-        return $this->id;
     }
 
     public function getCreatedAt() : ?DateTimeImmutable

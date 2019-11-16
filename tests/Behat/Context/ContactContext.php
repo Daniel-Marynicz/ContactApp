@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Behat\Context;
 
-use App\Entity\Contact;
-use App\Entity\ContactEmail;
-use App\Manager\ContactManager;
+use App\Contact\Domain\Model\Contact;
+use App\Contact\Domain\Model\ContactEmail;
+use App\Contact\Infrastructure\Manager\ContactManager;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 

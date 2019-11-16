@@ -1,0 +1,4 @@
+api:
+  resource: ../../src/Contact/Infrastructure/Api/
+  type: annotation
+  prefix: /api

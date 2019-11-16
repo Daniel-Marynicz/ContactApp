@@ -1,4 +1,0 @@
-api:
-  resource: ../../src/Api/Controller/
-  type: annotation
-  prefix: /api

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Shared\Infrastructure\ORM\Pagination;
 
-
 use Countable;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;

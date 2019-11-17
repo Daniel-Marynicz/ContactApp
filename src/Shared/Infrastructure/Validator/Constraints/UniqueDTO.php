@@ -22,7 +22,7 @@ class UniqueDTO extends Constraint
     public $uuidFieldName = 'uuid';
 
     /** @var string */
-    public $message = 'The contact "{{ string }}" already exits in db.';
+    public $message = 'The record "{{ string }}" already exits in db.';
 
     public function getTargets() : string
     {

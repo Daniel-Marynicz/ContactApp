@@ -26,7 +26,8 @@ class ContactDTO
      * @UniqueDTOConstraint(
      *     entityClass=Contact::class,
      *     entityPropertyName="name",
-     *     requestKey="uuid"
+     *     requestKey="uuid",
+     *     message="The contact with name ""{{ string }}"" already exits in db."
      * )
      */
     private $name;

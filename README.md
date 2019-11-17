@@ -52,14 +52,14 @@ $ docker-compose up
 To execute a symfony bin/console you can use
 
 ```
-$ docker-compose exec bin/console
+$ docker-compose exec php bin/console
 
 ```
 
 To run all tests
 
 ```
-$ docker-compose exec composer tests
+$ docker-compose exec php composer tests
 
 ``` 
 

@@ -36,13 +36,13 @@ Then you have to copy:
 Build Docker instance with:
 
 ```sh
-$ docker-composer build
+$ docker-compose build
 ```
 
 And start with:
 
 ```sh
-$ docker-composer up 
+$ docker-compose up 
 ```
 
 - You app is available at http://localhost:10012/.
@@ -52,14 +52,14 @@ $ docker-composer up
 To execute a symfony bin/console you can use
 
 ```
-$ docker-composer exec bin/console
+$ docker-compose exec bin/console
 
 ```
 
 To run all tests
 
 ```
-$ docker-composer exec composer tests
+$ docker-compose exec composer tests
 
 ``` 
 

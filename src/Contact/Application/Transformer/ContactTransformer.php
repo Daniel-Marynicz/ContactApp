@@ -14,22 +14,23 @@ use App\Contact\Application\DTO\ContactsGetDTO;
 use App\Contact\Domain\Model\Contact;
 use App\Contact\Domain\Model\ContactEmail;
 use App\Contact\Domain\Model\ContactPhoneNumber;
-use App\Shared\Domain\ValueObject\PaginatedResults;
+use App\Contact\Infrastructure\ORM\ContactPaginator;
 
 class ContactTransformer
 {
-    public function modelsToDto(PaginatedResults $paginatedResults) : ContactsGetDTO
+    public function modelsToDto(ContactPaginator $paginator) : ContactsGetDTO
     {
         $dtos = [];
-        foreach ($paginatedResults->getPaginator() as $contact) {
+
+        foreach ($paginator as $contact) {
             $dtos[] = $this->modelToDto($contact);
         }
 
         return new ContactsGetDTO(
-            $paginatedResults->getPageNumber(),
-            $paginatedResults->getTotalPages(),
-            $paginatedResults->getCount(),
-            $paginatedResults->getLimit(),
+            $paginator->getCurrentPage(),
+            $paginator->getTotalPages(),
+            $paginator->count(),
+            $paginator->getLimitPerPage(),
             $dtos
         );
     }

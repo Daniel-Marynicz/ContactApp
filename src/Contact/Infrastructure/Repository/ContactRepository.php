@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Contact\Infrastructure\Repository;
 
 use App\Contact\Domain\Model\Contact;
-use App\Shared\Domain\ValueObject\PageParameters;
+use App\Contact\Infrastructure\ORM\ContactPaginator;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use RuntimeException;
@@ -88,20 +87,12 @@ final class ContactRepository
         return $this->repository->createQueryBuilder($alias, $indexBy);
     }
 
-    /**
-     * @param Query|QueryBuilder|null $query
-     */
-    public function createPaginator(PageParameters $pageParameters, $query = null) : Paginator
+    public function createPaginator(int $page, int $limit) : ContactPaginator
     {
-        if (! $query) {
-            $query = $this
-                ->createQueryBuilder('contacts');
-            $query->orderBy('contacts.id', 'ASC');
-        }
-        $query
-            ->setFirstResult($pageParameters->getFirstResult())
-            ->setMaxResults($pageParameters->getLimitPerPage());
+        $query = $this
+            ->createQueryBuilder('contacts')
+            ->orderBy('contacts.id', 'ASC');
 
-        return new Paginator($query);
+        return new ContactPaginator(new Paginator($query), $page, $limit);
     }
 }

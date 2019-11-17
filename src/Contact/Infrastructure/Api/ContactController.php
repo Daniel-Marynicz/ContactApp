@@ -14,8 +14,6 @@ use App\Contact\Infrastructure\Manager\ContactManager;
 use App\Contact\Infrastructure\Repository\ContactRepository;
 use App\Shared\Application\DTO\Error\BadRequestDTO;
 use App\Shared\Application\Transformer\ConstraintViolationTransformer;
-use App\Shared\Domain\ValueObject\PageParameters;
-use App\Shared\Infrastructure\Pager\PaginatedResultsFactory;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -77,11 +75,9 @@ class ContactController extends AbstractFOSRestController
      */
     public function getListAction(int $page, int $limit) : Response
     {
-        $pageParameters = new PageParameters($page, $limit);
-        $paginator      = $this->repository->createPaginator($pageParameters);
-        $results        = PaginatedResultsFactory::createPaginatedResults($paginator, $pageParameters);
+        $paginator = $this->repository->createPaginator($page, $limit);
 
-        $list = $this->contactTransformer->modelsToDto($results);
+        $list = $this->contactTransformer->modelsToDto($paginator);
 
         return $this->handleView(
             $this->view($list, Response::HTTP_OK)

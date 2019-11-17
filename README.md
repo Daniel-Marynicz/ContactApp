@@ -11,7 +11,9 @@ App uses a number of open source projects to work properly:
 * [Composer]    - A Dependency Manager for PHP
 * [PHP_CodeSniffer] PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards
 * [PHPUnit] The PHP Testing Framework
+* [Behat] A php framework for autotesting your business expectations.
 * [PHPStan] PHP Static Analysis Tool - discover bugs in your code without running it!
+* [Deptrac] Keep your architecture clean.
 
 ### Coding standards
 
@@ -43,8 +45,8 @@ And start with:
 $ docker-composer up 
 ```
 
-- You app is available at http://localhost:10011/.
-- Documentation for the api is available at http://localhost:10011/api/doc.
+- You app is available at http://localhost:10012/.
+- Documentation for the api is available at http://localhost:10012/api/doc.
 
  
 To execute a symfony bin/console you can use
@@ -81,5 +83,7 @@ PROPRIETARY
    [PHPStan]:   <https://github.com/phpstan/phpstan>
    [Doctrine Coding Standard]:   <https://github.com/doctrine/coding-standard>
    [PSR2]:   <https://www.php-fig.org/psr/psr-2/>
+   [Behat]: <https://behat.org/>
+   [Deptrac]: <https://github.com/sensiolabs-de/deptrac>
 
 

@@ -19,18 +19,10 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
-            App:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
             AppContact:
                 is_bundle: false
                 type: xml
-                #type: annotation
                 dir: '%kernel.project_dir%/src/Contact/Infrastructure/Model'
-                #dir: '%kernel.project_dir%/src/Contact/Domain/Model'
                 prefix: 'App\Contact\Domain\Model'
                 alias: AppContact
 

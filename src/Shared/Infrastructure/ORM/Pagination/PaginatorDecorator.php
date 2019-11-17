@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Shared\Infrastructure\ORM\Pagination;
 
+use Countable;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use IteratorAggregate;
 use Traversable;
 
-abstract class PaginatorDecorator
+abstract class PaginatorDecorator implements Countable, IteratorAggregate
 {
     /** @var Paginator */
     protected $paginator;

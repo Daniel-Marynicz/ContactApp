@@ -1,4 +1,4 @@
-# Some App
+# Contact App
 ======
 
 ### Tech

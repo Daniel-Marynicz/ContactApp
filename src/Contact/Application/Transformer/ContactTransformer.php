@@ -95,7 +95,7 @@ class ContactTransformer
     {
         $values = $contact->getEmails();
         foreach ($values as $key => $value) {
-            if ($contactDTO->getEmailWithValue($value->getValue())) {
+            if ($contactDTO->getEmailWithValueAndLabel($value->getValue(), $value->getLabel())) {
                 continue;
             }
 
@@ -106,7 +106,7 @@ class ContactTransformer
     private function addEmailsToModel(ContactDTO $contactDTO, Contact $contact) : void
     {
         foreach ($contactDTO->getEmails() as $value) {
-            $contactValue = $contact->getEmailWithValue($value->getValue());
+            $contactValue = $contact->getEmailWithValueAndLabel($value->getValue(), $value->getLabel());
             if (! $contactValue instanceof ContactEmail) {
                 $contactValue = new ContactEmail($value->getValue());
             }
@@ -120,7 +120,7 @@ class ContactTransformer
     {
         $values = $contact->getPhoneNumbers();
         foreach ($values as $key => $value) {
-            if ($contactDTO->getPhoneNumberWithValue($value->getValue())) {
+            if ($contactDTO->getPhoneNumberWithValueAndLabel($value->getValue(), $value->getLabel())) {
                 continue;
             }
 
@@ -131,7 +131,7 @@ class ContactTransformer
     private function addPhoneNumbersToModel(ContactDTO $contactDTO, Contact $contact) : void
     {
         foreach ($contactDTO->getPhoneNumbers() as $value) {
-            $contactValue = $contact->getPhoneNumberWithValue($value->getValue());
+            $contactValue = $contact->getPhoneNumberWithValueAndLabel($value->getValue(), $value->getLabel());
             if (! $contactValue instanceof ContactPhoneNumber) {
                 $contactValue = new ContactPhoneNumber($value->getValue());
             }

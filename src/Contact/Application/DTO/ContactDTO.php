@@ -124,11 +124,9 @@ class ContactDTO
         return $this->emails;
     }
 
-    public function getEmailWithValue(string $value) : ?ContactEmailDTO
+    public function getEmailWithValueAndLabel(string $value, ?string $label) : ?ContactEmailDTO
     {
-        $criteria = new Criteria();
-        $criteria->where(Criteria::expr()->eq('value', $value));
-        $email = $this->getEmails()->matching($criteria)->first();
+        $email = $this->getEmails()->matching($this->createValueAndLabelCriteria($label, $value))->first();
 
         return $email ? $email : null;
     }
@@ -160,11 +158,9 @@ class ContactDTO
         return $this->phoneNumbers;
     }
 
-    public function getPhoneNumberWithValue(string $value) : ?ContactPhoneDTO
+    public function getPhoneNumberWithValueAndLabel(string $value, ?string $label) : ?ContactPhoneDTO
     {
-        $criteria = new Criteria();
-        $criteria->where(Criteria::expr()->eq('value', $value));
-        $phone = $this->getPhoneNumbers()->matching($criteria)->first();
+        $phone = $this->getPhoneNumbers()->matching($this->createValueAndLabelCriteria($value, $label))->first();
 
         return $phone ? $phone : null;
     }
@@ -172,5 +168,12 @@ class ContactDTO
     public function getCountry() : ?string
     {
         return $this->country;
+    }
+
+    private function createValueAndLabelCriteria(?string $value, ?string $label) : Criteria
+    {
+        return Criteria::create()
+            ->where(Criteria::expr()->eq('value', $value))
+            ->andWhere(Criteria::expr()->eq('label', $label));
     }
 }

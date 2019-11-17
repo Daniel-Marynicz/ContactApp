@@ -102,11 +102,9 @@ class Contact
         return $this;
     }
 
-    public function getEmailWithValue(string $value) : ?ContactEmail
+    public function getEmailWithValueAndLabel(string $value, ?string $label) : ?ContactEmail
     {
-        $criteria = new Criteria();
-        $criteria->where(Criteria::expr()->eq('value', $value));
-        $contactEmail = $this->getEmails()->matching($criteria)->first();
+        $contactEmail = $this->getEmails()->matching($this->createValueAndLabelCriteria($value, $label))->first();
 
         return $contactEmail ? $contactEmail : null;
     }
@@ -128,11 +126,10 @@ class Contact
         return $this;
     }
 
-    public function getPhoneNumberWithValue(string $value) : ?ContactPhoneNumber
+    public function getPhoneNumberWithValueAndLabel(string $value, ?string $label) : ?ContactPhoneNumber
     {
-        $criteria = new Criteria();
-        $criteria->where(Criteria::expr()->eq('value', $value));
-        $contactPhoneNumber = $this->getEmails()->matching($criteria)->first();
+        $contactPhoneNumber = $this
+            ->getPhoneNumbers()->matching($this->createValueAndLabelCriteria($value, $label))->first();
 
         return $contactPhoneNumber ? $contactPhoneNumber : null;
     }
@@ -207,5 +204,12 @@ class Contact
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    private function createValueAndLabelCriteria(string $value, ?string $label) : Criteria
+    {
+        return Criteria::create()
+            ->where(Criteria::expr()->eq('value', $value))
+            ->andWhere(Criteria::expr()->eq('label', $label));
     }
 }

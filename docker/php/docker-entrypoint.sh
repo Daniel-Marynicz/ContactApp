@@ -45,7 +45,7 @@ if [ "$1" = 'php-fpm' ] ; then
 	fi
 
     if [ "$APP_ENV" != 'prod' ]; then
-        echo -e "\e[30;48;5;82m Symfony app is available at http://localhost:10011 \e[0m"
+        echo -e "\e[30;48;5;82m Symfony app is available at http://localhost:10012 \e[0m"
     fi
 fi
 

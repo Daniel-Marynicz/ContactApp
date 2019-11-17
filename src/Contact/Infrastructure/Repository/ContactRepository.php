@@ -31,7 +31,7 @@ final class ContactRepository
         $this->repository = $repository;
     }
 
-    public function find(string $id) : ?Contact
+    public function find(int $id) : ?Contact
     {
         $contact = $this->repository->find($id);
         if ($contact !== null && ! $contact instanceof Contact) {

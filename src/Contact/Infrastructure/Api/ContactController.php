@@ -242,7 +242,7 @@ class ContactController extends AbstractFOSRestController
         );
     }
 
-    protected function handleValidationErrors(ConstraintViolationListInterface $validationErrors) : Response
+    private function handleValidationErrors(ConstraintViolationListInterface $validationErrors) : Response
     {
         $error = $this->violationTransformer->violationsToDto($validationErrors);
 

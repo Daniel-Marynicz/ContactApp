@@ -62,13 +62,13 @@ class ContactController extends AbstractFOSRestController
      * @Rest\QueryParam(
      *     name="page",
      *     requirements="\d+",
-     *     default=PageParameters::DEFAULT_PAGE_NUMBER,
+     *     default=1,
      *     description="Results page"
      * )
      * @Rest\QueryParam(
      *     name="limit",
      *     requirements="\d+",
-     *     default=PageParameters::DEFAULT_LIMIT_PER_PAGE,
+     *     default=100,
      *     description="Limit results per page"
      * )
      * @Rest\Get("contact")

@@ -346,6 +346,9 @@
             "config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "sensiolabs-de/deptrac-shim": {
+        "version": "0.6.0"
+    },
     "slevomat/coding-standard": {
         "version": "5.0.4"
     },

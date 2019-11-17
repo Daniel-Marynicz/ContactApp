@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y \
     libfcgi-bin \
     libzip-dev \
     libicu-dev \
+    graphviz \
     rsync && apt-get clean
 
 RUN docker-php-ext-install -j$(nproc) \

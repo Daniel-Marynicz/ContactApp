@@ -1,0 +1,29 @@
+paths:
+  - ./src
+exclude_files:
+  - ^\.\/src\/Migrations\/.*
+layers:
+  - name: Shared
+    collectors:
+      - type: className
+        regex: ^App\\Shared\\.*
+  - name: Contact
+    collectors:
+      - type: className
+        regex: ^App\\Contact\\.*
+  - name: App
+    collectors:
+      - type: bool
+        must:
+          - type: className
+            regex: ^App\\.*
+        must_not:
+          - type: className
+            regex: ^App\\Shared\\.*
+          - type: className
+            regex: ^App\\Contact\\.*
+ruleset:
+  Contact:
+    - Shared
+  Shared:
+    - App
